@@ -27,5 +27,5 @@ Basic Example
 		NSLog(@"%@", output);
 
 Output:
-		.desrever eb dluohs gnirts sihT
-
+			.desrever eb dluohs gnirts sihT
+			
