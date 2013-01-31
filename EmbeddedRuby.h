@@ -5,7 +5,6 @@
 @interface EmbeddedRuby : NSObject
 
 @property (retain) NSString *scriptName;
-@property (retain) NSArray *options;
 @property (retain) NSString *fileName;
 
 - (void)run;
