@@ -4,7 +4,6 @@ int main(int argc, char *argv[]) {
 	EmbeddedRubyIO *io;
 	EmbeddedRuby *ruby = [[EmbeddedRuby alloc] init];
 	[ruby setScriptName:@"embedded-ruby"];
-	[ruby setOptions:@[@"-d"]];
 	[ruby setFileName:@"test.rb"];
 	io = [ruby forkRuby];
 	NSData *tmp = [@"QUACK" dataUsingEncoding:NSASCIIStringEncoding];
