@@ -10,6 +10,7 @@
 - (void)run;
 - (void)runFile:(NSString *)fileName;
 - (EmbeddedRubyIO *)forkRuby;
+- (EmbeddedRubyIO *)forkRubyString:(NSString *)rubyCode;
 
 - (char **)cStringArrayFromNSArray:(NSArray *)array;
 - (char *)cStringFromNSString:(NSString *)string;

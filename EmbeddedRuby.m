@@ -86,6 +86,16 @@
 	}
 }
 
+- (EmbeddedRubyIO *)forkRubyString:(NSString *)rubyCode {
+	[self setFileName:@"-"]; // stdin
+	EmbeddedRubyIO *io = [self forkRuby];
+	NSData *rubyData = [rubyCode dataUsingEncoding:NSASCIIStringEncoding];
+	NSFileHandle *stdin = [io rubyStandardInput];
+	[stdin writeData:rubyData];
+	[stdin closeFile];
+	return io;
+}
+
 - (char **)cStringArrayFromNSArray:(NSArray *)array {
 	char **cArray = malloc([array count] * sizeof(char*));
 	if (cArray == nil) {
