@@ -1,23 +1,31 @@
 Objective-C Ruby
 ================
-An Objective-C class (EmbeddedRuby for now) providing access to the Ruby interpreter.
+An Objective-C class (EmbeddedRuby for now) providing access to the Ruby interpreter. It relies on 
+the Ruby and Foundation frameworks.
 
-notes
---------------
-2013-01-30
-* lol I don't know how to use ruby\_options() apparently. removed that and EmbeddedRuby works fine.
-* so now I need to figure out how ruby\_options() works.
+Currently works at a basic level with ruby 1.8.7 - can load a file, fork ruby, and give
+access to ruby's stdin/out/err. Untested with ruby 1.9.
 
-2013-01-30
-* doesn't seem like I'm getting the NSString -> NSData conversion done correctly
-* using write(data, [nsfilehandle fileDescriptor], datalength) gets data to Ruby, but:
-	* Ruby complains like it's trying to parse the data rather than just read it
-	* it's not getting valid ASCII characters
-* using [nsfilehandle writeData:data] doesn't get the data to Ruby - STDIN.read.length == 0
+---
+Basic Example
+-------------
+		#import "EmbeddedRuby.h"
 
-2013-01-29
-* writing to rubyStandardInput does not work - in Ruby STDIN.read.length == 0 - even though STDIN.read will block 
-until rubyStandardInput is closed
-* an attempt to set the Ruby options to "-d" (debug flag) didn't work ($DEBUG == false)
-* an attempt to set the Ruby script name ($0) didn't work - seemed to be set to "-" (stdin?)
-* reading from rubyStandardOutput & rubyStandardError is working
+		EmbeddedRuby *ruby = [[EmbeddedRuby alloc] init];
+		[ruby setFileName:@"reverse_stdin.rb"]; // pretend this exists, reads stdin, reverses & prints it to stdout
+
+		EmbeddedRubyIO *io = [ruby forkRuby];
+		NSFilehandle *stdin = [io rubyStandardInput];
+		NSData *input = [@"This string should be reversed." dataUsingEncoding:NSASCIIStringEncoding];
+		[stdin writeData:input];
+		[stdin closeFile];
+
+		NSFilehandle *stdout = [io rubyStandardOutput];
+		NSString *output = [[NSString alloc] initWithData:[stdout readDataToEndOfFile] encoding:NSASCIIStringEncoding];
+		[io close]; // closes stdin/out/err
+
+		NSLog(@"%@", output);
+
+Output:
+		.desrever eb dluohs gnirts sihT
+
