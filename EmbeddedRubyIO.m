@@ -3,7 +3,7 @@
 @implementation EmbeddedRubyIO : NSObject
 
 - (id)initWithInput:(int)inputHandle andOutput:(int)outputHandle andError:(int)errorHandle {
-	[self init];
+	self = [self init];
 	_rubyStandardInput = [[NSFileHandle alloc] initWithFileDescriptor:inputHandle closeOnDealloc:YES];
 	_rubyStandardOutput = [[NSFileHandle alloc] initWithFileDescriptor:outputHandle closeOnDealloc:YES];
 	_rubyStandardError = [[NSFileHandle alloc] initWithFileDescriptor:errorHandle closeOnDealloc:YES];
